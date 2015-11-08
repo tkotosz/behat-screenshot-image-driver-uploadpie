@@ -85,6 +85,7 @@ class UploadPie implements ImageDriverInterface
         $expire = 1; // TODO expire value should be between 1 and 5
 
         $request = $this->buildRequest($image, $expire);
+        $this->client->setOption(CURLOPT_TIMEOUT, 10000);
         $this->client->send($request, $response);
 
         return $response;
