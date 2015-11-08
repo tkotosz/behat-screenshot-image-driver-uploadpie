@@ -31,7 +31,7 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Bex\\Behat\\ScreenshotExtension\\Driver\\": "src"
         }
     }
