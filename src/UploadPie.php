@@ -73,7 +73,7 @@ class UploadPie implements ImageDriverInterface
     }
 
     /**
-     * @param  string $value
+     * @param  string $expire
      *
      * @return int
      */
