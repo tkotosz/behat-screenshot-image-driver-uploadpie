@@ -3,6 +3,7 @@
 namespace Bex\Behat\ScreenshotExtension\Driver;
 
 use Bex\Behat\ScreenshotExtension\Driver\ImageDriverInterface;
+use Bex\Behat\ScreenshotExtension\Driver\Service\UploadPieApi;
 use Buzz\Client\Curl;
 use Buzz\Message\Form\FormRequest;
 use Buzz\Message\Form\FormUpload;
@@ -14,12 +15,15 @@ class UploadPie implements ImageDriverInterface
 {
     const CONFIG_PARAM_EXPIRE = 'expire';
 
-    const REQUEST_URL = 'http://uploadpie.com/';
+    /**
+     * @var array
+     */
+    private $expireMapping = ['30' => 1, '60' => 2];
 
     /**
-     * @var Curl
+     * @var UploadPieApi
      */
-    private $client;
+    private $api;
 
     /**
      * @var string
@@ -27,12 +31,11 @@ class UploadPie implements ImageDriverInterface
     private $expire;
 
     /**
-     * @param Curl       $client
-     * @param Parameters $parameters
+     * @param UploadPieApi|null $api
      */
-    public function __construct(Curl $client = null)
+    public function __construct(UploadPieApi $api = null)
     {
-        $this->client = $client ?: new Curl();
+        $this->api = $api ?: new UploadPieApi();
     }
 
     /**
@@ -42,7 +45,8 @@ class UploadPie implements ImageDriverInterface
     {
         $builder
             ->children()
-                ->scalarNode(self::CONFIG_PARAM_EXPIRE)
+                ->enumNode(self::CONFIG_PARAM_EXPIRE)
+                    ->values(array(30, 60))
                     ->defaultValue(30)
                 ->end()
             ->end();
@@ -54,7 +58,7 @@ class UploadPie implements ImageDriverInterface
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $this->expire = $config[self::CONFIG_PARAM_EXPIRE];
+        $this->expire = $this->convertExpireValue($config[self::CONFIG_PARAM_EXPIRE]);
     }
 
     /**
@@ -65,65 +69,16 @@ class UploadPie implements ImageDriverInterface
      */
     public function upload($binaryImage, $filename)
     {
-        $response = $this->callApi($binaryImage, $filename);
-        return $this->processResponse($response);
+        return $this->api->call($binaryImage, $filename, $this->expire);
     }
 
     /**
-     * @param  string $binaryImage
-     * @param  string $filename
+     * @param  string $value
      *
-     * @return Response
+     * @return int
      */
-    private function callApi($binaryImage, $filename)
+    private function convertExpireValue($expire)
     {
-        $response = new Response();
-
-        $image = new FormUpload();
-        $image->setFilename($filename);
-        $image->setContent($binaryImage);
-        $expire = 1; // TODO expire value should be between 1 and 5
-
-        $request = $this->buildRequest($image, $expire);
-        $this->client->setOption(CURLOPT_TIMEOUT, 10000);
-        $this->client->send($request, $response);
-
-        return $response;
-    }
-
-    /**
-     * @param  Response $response
-     *
-     * @return string
-     */
-    private function processResponse(Response $response)
-    {
-        $matches = [];
-
-        preg_match('/<input.*value="(.*)"/U', $response->getContent(), $matches);
-
-        if (!isset($matches[1])) {
-            throw new \RuntimeException('Screenshot upload failed');
-        }
-
-        return $matches[1];
-    }
-
-    /**
-     * @param  FormUpload $image
-     * @param  int        $expire
-     *
-     * @return FormRequest
-     */
-    private function buildRequest($image, $expire)
-    {
-        $request = new FormRequest();
-        
-        $request->fromUrl(self::REQUEST_URL);
-        $request->setField('uploadedfile', $image);
-        $request->setField('expire', $expire);
-        $request->setField('upload', 1);
-
-        return $request;
+        return $this->expireMapping[$expire];
     }
 }
