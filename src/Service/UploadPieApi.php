@@ -38,7 +38,6 @@ class UploadPieApi
         $image = new FormUpload();
         $image->setFilename($filename);
         $image->setContent($binaryImage);
-        $expire = $expire;
 
         $request = $this->buildRequest($image, $expire);
         $this->client->setOption(CURLOPT_TIMEOUT, 10000);

@@ -18,7 +18,7 @@ class UploadPie implements ImageDriverInterface
     /**
      * @var array
      */
-    private $expireMapping = ['30' => 1, '60' => 2];
+    private $expireMapping = ['30m' => 1, '1h' => 2, '6h' => 3, '1d' => 4, '1w' => 5];
 
     /**
      * @var UploadPieApi
@@ -26,7 +26,7 @@ class UploadPie implements ImageDriverInterface
     private $api;
 
     /**
-     * @var string
+     * @var int
      */
     private $expire;
 
@@ -46,8 +46,8 @@ class UploadPie implements ImageDriverInterface
         $builder
             ->children()
                 ->enumNode(self::CONFIG_PARAM_EXPIRE)
-                    ->values(array(30, 60))
-                    ->defaultValue(30)
+                    ->values(array('30m', '1h', '6h', '1d', '1w'))
+                    ->defaultValue('30m')
                 ->end()
             ->end();
     }
