@@ -1,2 +1,3 @@
-# behat-screenshot-image-driver-uploadpie
-uploadpie.com image driver for bex/behat-screenshot behat extension
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/tkotosz/behat-screenshot-image-driver-uploadpie/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/tkotosz/behat-screenshot-image-driver-uploadpie/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/tkotosz/behat-screenshot-image-driver-uploadpie/badges/build.png?b=master)](https://scrutinizer-ci.com/g/tkotosz/behat-screenshot-image-driver-uploadpie/build-status/master)
+[![Build Status](https://travis-ci.org/tkotosz/behat-screenshot-image-driver-uploadpie.svg?branch=master)](https://travis-ci.org/tkotosz/behat-screenshot-image-driver-uploadpie)
