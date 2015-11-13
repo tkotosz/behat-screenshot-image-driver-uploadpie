@@ -53,5 +53,13 @@
         "psr-4": {
             "Bex\\Behat\\ScreenshotExtension\\Driver\\": "src"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ],
+        "post-update-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ]
     }
 }
