@@ -22,7 +22,6 @@
     "require": {
         "php" : ">=5.4",
         "bex/behat-screenshot": "^1.0",
-        "bex/behat-extension-driver-locator": "^1.0",
         "kriswallsmith/buzz": "^0.15.0"
     },
     "require-dev": {
