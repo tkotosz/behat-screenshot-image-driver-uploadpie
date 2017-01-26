@@ -29,7 +29,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iShouldSeeTheUploadPieImageUrl()
     {
-        $message = 'http://uploadpie.com/';
+        $message = 'https://uploadpie.com/';
         $output = $this->testRunnerContext->getStandardOutputMessage() .
             $this->testRunnerContext->getStandardErrorMessage();
         $this->assertOutputContainsMessage($output, $message);

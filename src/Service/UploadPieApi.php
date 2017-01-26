@@ -9,7 +9,7 @@ use Buzz\Message\Response;
 
 class UploadPieApi
 {
-    const REQUEST_URL = 'http://uploadpie.com/';
+    const REQUEST_URL = 'https://uploadpie.com/';
 
     /**
      * @var Curl
