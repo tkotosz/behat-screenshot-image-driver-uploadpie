@@ -39,6 +39,18 @@ default:
           expire: '1h' # possible values: '30m', '1h', '6h', '1d', '1w'
 ```
 
+You must configure the authentication like this (you can register [here](https://uploadpie.com/why)):
+
+```yml
+default:
+  extensions:
+    Bex\Behat\ScreenshotExtension:
+      active_image_drivers: upload_pie
+      image_drivers:
+        upload_pie:
+          auth: 'yourPassword'
+```
+
 Usage
 -----
 

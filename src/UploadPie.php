@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class UploadPie implements ImageDriverInterface
 {
     const CONFIG_PARAM_EXPIRE = 'expire';
+    const CONFIG_PARAM_AUTH = 'auth';
 
     /**
      * @var array
@@ -29,6 +30,11 @@ class UploadPie implements ImageDriverInterface
      * @var int
      */
     private $expire;
+
+    /**
+     * @var string
+     */
+    private $auth;
 
     /**
      * @param UploadPieApi|null $api
@@ -49,6 +55,11 @@ class UploadPie implements ImageDriverInterface
                     ->values(array('30m', '1h', '6h', '1d', '1w'))
                     ->defaultValue('30m')
                 ->end()
+            ->end()
+            ->children()
+                ->scalarNode(self::CONFIG_PARAM_AUTH)
+                ->isRequired()
+                ->cannotBeEmpty()
             ->end();
     }
 
@@ -59,6 +70,7 @@ class UploadPie implements ImageDriverInterface
     public function load(ContainerBuilder $container, array $config)
     {
         $this->expire = $this->convertExpireValue($config[self::CONFIG_PARAM_EXPIRE]);
+        $this->auth = $config[self::CONFIG_PARAM_AUTH];
     }
 
     /**
@@ -69,7 +81,7 @@ class UploadPie implements ImageDriverInterface
      */
     public function upload($binaryImage, $filename)
     {
-        return $this->api->call($binaryImage, $filename, $this->expire);
+        return $this->api->call($binaryImage, $filename, $this->expire, $this->auth);
     }
 
     /**

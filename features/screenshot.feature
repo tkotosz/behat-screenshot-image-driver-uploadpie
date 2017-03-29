@@ -73,6 +73,9 @@ Feature: Taking screenshot
 
           Bex\Behat\ScreenshotExtension:
             active_image_drivers: upload_pie
+            image_drivers:
+              upload_pie:
+                auth: 'passwd'
       """
     When I run Behat
     Then I should see a failing test
