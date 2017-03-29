@@ -28,10 +28,11 @@ class UploadPieApi
      * @param  string $binaryImage
      * @param  string $filename
      * @param  int    $expire
+     * @param  string $auth
      *
      * @return Response
      */
-    public function call($binaryImage, $filename, $expire)
+    public function call($binaryImage, $filename, $expire, $auth)
     {
         $response = new Response();
 
@@ -39,7 +40,7 @@ class UploadPieApi
         $image->setFilename($filename);
         $image->setContent($binaryImage);
 
-        $request = $this->buildRequest($image, $expire);
+        $request = $this->buildRequest($image, $expire, $auth);
         $this->client->setOption(CURLOPT_TIMEOUT, 10000);
         $this->client->send($request, $response);
 
@@ -67,10 +68,11 @@ class UploadPieApi
     /**
      * @param  FormUpload $image
      * @param  int        $expire
+     * @param  string     $auth
      *
      * @return FormRequest
      */
-    private function buildRequest($image, $expire)
+    private function buildRequest($image, $expire, $auth)
     {
         $request = new FormRequest();
         
@@ -78,6 +80,7 @@ class UploadPieApi
         $request->setField('uploadedfile', $image);
         $request->setField('expire', $expire);
         $request->setField('upload', 1);
+        $request->addHeader('Cookie: pie_auth=' . $auth);
 
         return $request;
     }
