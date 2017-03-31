@@ -20,8 +20,8 @@ class UploadPieSpec extends ObjectBehavior
 
     function it_should_call_the_api_with_the_correct_data(ContainerBuilder $container, UploadPieApi $api)
     {
-        $api->call('imgdata', 'img_file_name.png', 1)->shouldBeCalled()->willReturn('imgurl');
-        $this->load($container, ['expire' => '30m']);
+        $api->call('imgdata', 'img_file_name.png', 1, 'passwd')->shouldBeCalled()->willReturn('imgurl');
+        $this->load($container, ['expire' => '30m', 'auth' => 'passwd']);
         $this->upload('imgdata', 'img_file_name.png')->shouldReturn('imgurl');
     }
 }

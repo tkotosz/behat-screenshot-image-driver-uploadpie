@@ -27,6 +27,18 @@ default:
       active_image_drivers: upload_pie
 ```
 
+You must configure the authentication like this (you can register [here](https://uploadpie.com/why)):
+
+```yml
+default:
+  extensions:
+    Bex\Behat\ScreenshotExtension:
+      active_image_drivers: upload_pie
+      image_drivers:
+        upload_pie:
+          auth: 'API_KEY' # can be your authentication key or and environment variable name
+```
+
 You can configure the expire time of the uploaded image (by default it is 30m) like this:
 
 ```yml
