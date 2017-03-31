@@ -75,7 +75,7 @@ Feature: Taking screenshot
             active_image_drivers: upload_pie
             image_drivers:
               upload_pie:
-                auth: 'passwd'
+                auth: 'UPLOADPIE_API_KEY'
       """
     When I run Behat
     Then I should see a failing test

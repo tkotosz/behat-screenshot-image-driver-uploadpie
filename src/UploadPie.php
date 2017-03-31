@@ -55,11 +55,10 @@ class UploadPie implements ImageDriverInterface
                     ->values(array('30m', '1h', '6h', '1d', '1w'))
                     ->defaultValue('30m')
                 ->end()
-            ->end()
-            ->children()
                 ->scalarNode(self::CONFIG_PARAM_AUTH)
-                ->isRequired()
-                ->cannotBeEmpty()
+                    ->isRequired()
+                    ->cannotBeEmpty()
+                ->end()
             ->end();
     }
 
@@ -70,7 +69,7 @@ class UploadPie implements ImageDriverInterface
     public function load(ContainerBuilder $container, array $config)
     {
         $this->expire = $this->convertExpireValue($config[self::CONFIG_PARAM_EXPIRE]);
-        $this->auth = $config[self::CONFIG_PARAM_AUTH];
+        $this->auth = $this->resolveAuthParam($config[self::CONFIG_PARAM_AUTH]);
     }
 
     /**
@@ -92,5 +91,21 @@ class UploadPie implements ImageDriverInterface
     private function convertExpireValue($expire)
     {
         return $this->expireMapping[$expire];
+    }
+
+    /**
+     * @param  string $auth
+     *
+     * @return string
+     */
+    private function resolveAuthParam($auth)
+    {
+        $value = getenv($auth);
+
+        if ($value !== false) {
+            return $value;
+        }
+
+        return $auth;
     }
 }
